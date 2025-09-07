@@ -82,7 +82,7 @@ def all_quotes_view(request):
         'direction': request.GET.get('direction', 'desc'),
     }
 
-    # Пока фильтрация работает только через JS (AJAX)
+
     return render(request, 'web/all_quotes.html', {
         'sources': sources,
         'quotes': quotes,

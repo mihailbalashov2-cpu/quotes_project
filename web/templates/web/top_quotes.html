@@ -6,7 +6,7 @@
 <h2>Топ 10 цитат</h2>
 <p>Получено цитат: {{ quotes|length }}</p>
 
-<table class="quotes-table">
+<table class="quotes-table tooltip-table">
   <thead>
     <tr>
       <th>№</th>
@@ -20,8 +20,12 @@
     {% for quote in quotes %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <td>{{ quote.source.name|default:"Не указан" }}</td>
-      <td>{{ quote.text }}</td>
+      <td class="truncate tooltip" title="{{ quote.source.name|default:'Не указан' }}">
+        {{ quote.source.name|default:"Не указан" }}
+      </td>
+      <td class="truncate tooltip" title="{{ quote.text }}">
+        {{ quote.text }}
+      </td>
       <td>{{ quote.likes }}</td>
       <td>{{ quote.views }}</td>
     </tr>

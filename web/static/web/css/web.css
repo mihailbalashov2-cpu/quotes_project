@@ -90,3 +90,32 @@ hr {
 .quotes-table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip::after {
+  content: attr(data-full);
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  display: none;
+  z-index: 100;
+}
+
+.tooltip:hover::after {
+  display: block;
+}
