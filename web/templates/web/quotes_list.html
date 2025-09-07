@@ -1,0 +1,13 @@
+{% if quotes %}
+    <ul>
+        {% for quote in quotes %}
+            <li>
+                <blockquote>{{ quote.text }}</blockquote>
+                <p><strong>Источник:</strong> {{ quote.source.name }}</p>
+                <p>Вес: {{ quote.weight }}, Просмотры: {{ quote.views }}, Лайки: {{ quote.likes }}, Дизлайки: {{ quote.dislikes }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Цитат не найдено.</p>
+{% endif %}

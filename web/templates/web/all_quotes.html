@@ -1,0 +1,59 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Все цитаты с фильтрами{% endblock %}
+
+{% block content %}
+<h2>Все цитаты</h2>
+
+<form id="filter-form" method="get" style="margin-bottom: 20px;">
+    <label for="source">Источник:</label>
+    <select name="source" id="source">
+        <option value="">Все</option>
+        {% for source in sources %}
+            <option value="{{ source.id }}" {% if current_filters.source == source.id|stringformat:"s" %}selected{% endif %}>{{ source.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="min_likes">Минимум лайков:</label>
+    <input type="number" name="min_likes" id="min_likes" value="{{ current_filters.min_likes|default:'' }}" min="0">
+
+    <label for="min_weight">Минимум веса:</label>
+    <input type="number" name="min_weight" id="min_weight" value="{{ current_filters.min_weight|default:'' }}" min="0">
+
+    <label for="sort_by">Сортировать по:</label>
+    <select name="sort_by" id="sort_by">
+        <option value="created_at" {% if current_filters.sort_by == 'created_at' %}selected{% endif %}>Дате добавления</option>
+        <option value="likes" {% if current_filters.sort_by == 'likes' %}selected{% endif %}>Лайкам</option>
+        <option value="views" {% if current_filters.sort_by == 'views' %}selected{% endif %}>Просмотрам</option>
+        <option value="weight" {% if current_filters.sort_by == 'weight' %}selected{% endif %}>Весу</option>
+    </select>
+
+    <select name="direction" id="direction">
+        <option value="desc" {% if current_filters.direction == 'desc' %}selected{% endif %}>По убыванию</option>
+        <option value="asc" {% if current_filters.direction == 'asc' %}selected{% endif %}>По возрастанию</option>
+    </select>
+</form>
+
+<div id="quotes-container">
+    {% include 'web/quotes_list.html' %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filter-form');
+    const container = document.getElementById('quotes-container');
+
+    form.addEventListener('change', function() {
+        const params = new URLSearchParams(new FormData(form)).toString();
+
+        fetch("{% url 'filter_quotes_ajax' %}?" + params)
+            .then(response => response.json())
+            .then(data => {
+                container.innerHTML = data.html;
+            })
+            .catch(error => console.error('Ошибка загрузки:', error));
+    });
+});
+</script>
+
+{% endblock %}

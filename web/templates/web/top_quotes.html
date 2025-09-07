@@ -1,0 +1,35 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Топ 10 цитат{% endblock %}
+
+{% block content %}
+<h2>Топ 10 цитат</h2>
+<p>Получено цитат: {{ quotes|length }}</p>
+
+<table class="quotes-table">
+  <thead>
+    <tr>
+      <th>№</th>
+      <th>Источник</th>
+      <th>Цитата</th>
+      <th>Лайки</th>
+      <th>Просмотры</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for quote in quotes %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ quote.source.name|default:"Не указан" }}</td>
+      <td>{{ quote.text }}</td>
+      <td>{{ quote.likes }}</td>
+      <td>{{ quote.views }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5">Цитат для отображения нет.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

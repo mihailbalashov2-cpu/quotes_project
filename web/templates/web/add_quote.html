@@ -1,0 +1,39 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Добавить цитату{% endblock %}
+
+{% block content %}
+    <h2>Добавить цитату</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            {{ form.text.label_tag }}<br>
+            {{ form.text }}
+        </p>
+
+        <p>
+            {{ form.weight.label_tag }}<br>
+            {{ form.weight }}
+        </p>
+
+        <p>
+            {{ form.source_name.label_tag }}<br>
+            {{ form.source_name }}
+            <datalist id="source-list">
+                {% for source in sources %}
+                    <option value="{{ source.name }}">
+                {% endfor %}
+            </datalist>
+            <br>
+            <small>{{ form.source_name.help_text }}</small>
+        </p>
+
+        {% if form.non_field_errors %}
+            <div style="color:red;">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <button type="submit">Добавить</button>
+    </form>
+{% endblock %}

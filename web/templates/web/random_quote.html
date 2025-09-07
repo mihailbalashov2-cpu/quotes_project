@@ -1,0 +1,61 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Случайная цитата{% endblock %}
+
+{% block content %}
+    {% if quote %}
+        <h2>Случайная цитата:</h2>
+        <blockquote id="quote-text">{{ quote.text }}</blockquote>
+        <p><strong>Источник:</strong> {{ quote.source }}</p>
+        <p>Просмотров: {{ quote.views }}</p>
+
+        <div id="likes-container">
+            <button id="like-btn" data-quote-id="{{ quote.id }}">👍 <span id="likes-count">{{ quote.likes }}</span></button>
+            <button id="dislike-btn" data-quote-id="{{ quote.id }}">👎 <span id="dislikes-count">{{ quote.dislikes }}</span></button>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const likeBtn = document.getElementById('like-btn');
+            const dislikeBtn = document.getElementById('dislike-btn');
+
+            function sendLikeDislike(action) {
+                const quoteId = likeBtn.dataset.quoteId;
+                fetch(`/api/quote/${quoteId}/like/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: new URLSearchParams({ action: action })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if(data.likes !== undefined && data.dislikes !== undefined) {
+                        document.getElementById('likes-count').textContent = data.likes;
+                        document.getElementById('dislikes-count').textContent = data.dislikes;
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+            }
+
+            likeBtn.addEventListener('click', e => {
+                e.preventDefault();
+                sendLikeDislike('like');
+            });
+
+            dislikeBtn.addEventListener('click', e => {
+                e.preventDefault();
+                sendLikeDislike('dislike');
+            });
+        });
+        </script>
+
+    {% else %}
+        <p>Цитаты еще не добавлены.</p>
+    {% endif %}
+{% endblock %}
+

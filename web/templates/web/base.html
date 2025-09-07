@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Цитаты{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'web/css/web.css' %}">
+
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="main-header">
+        <nav class="nav-bar">
+            <a href="{% url 'random_quote' %}">Случайная цитата</a> |
+            <a href="{% url 'add_quote' %}">Добавить цитату</a> |
+            <a href="{% url 'top_quotes' %}">Топ 10</a>
+            <a href="{% url 'all_quotes' %}">Все цитаты</a>
+        </nav>
+    </header>
+    <hr>
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
