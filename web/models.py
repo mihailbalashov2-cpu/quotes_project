@@ -25,9 +25,10 @@ class Quote(models.Model):
         return self.text if len(self.text) <= 50 else f"{self.text[:50]}..."
 
     def clean(self):
-        if self.source and not self.pk:
-            if Quote.objects.filter(source=self.source).count() >= 3:
-                raise ValidationError(f'Источник "{self.source.name}" уже содержит 3 цитаты.')
+        if self.source_id and not self.pk:
+            source = self.source
+            if Quote.objects.filter(source=source).count() >= 3:
+                raise ValidationError(f'У источника "{source.name}" уже есть 3 цитаты.')
 
     class Meta:
         ordering = ['-likes']
